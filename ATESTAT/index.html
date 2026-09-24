@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collecting Cars - Licitații Premium</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Fonturi moderne folosite în design-ul profesional -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- 1. TOP HEADER -->
+    <header class="main-header">
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4h14v4z"/></svg>
+            COLLECTING CARS
+        </div>
+        
+        <div class="search-bar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="searchInput" placeholder="Search for make, model, category, etc." onkeyup="filterCars()">
+        </div>
+
+        <div class="header-actions">
+            <button class="btn-sell" onclick="toggleAdminPanel()">+ Sell / Adaugă</button>
+            <button class="btn-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Sign In
+            </button>
+        </div>
+    </header>
+
+    <!-- 2. SUB-NAVIGARE (TABS) -->
+    <nav class="sub-nav">
+        <button class="nav-tab active">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            This Week
+        </button>
+        <button class="nav-tab">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Saved
+        </button>
+        <button class="nav-tab">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Live Auctions
+        </button>
+        <button class="nav-tab">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Coming Soon
+        </button>
+        <button class="nav-tab">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+            Results
+        </button>
+    </nav>
+
+    <!-- FORMULARUL DE ADMINISTRARE AL FIRMEI (Invisibil până apeși Sell) -->
+    <section id="adminPanel" class="admin-panel hidden">
+        <h2>Panou Firmă - Încarcă Anunț Nou</h2>
+        <form id="addCarForm" onsubmit="addNewCar(event)">
+            <div class="form-row">
+                <input type="text" id="carTitle" placeholder="Titlu (ex: 2015 DUCATI 1199 PANIGALE R)" required>
+                <input type="number" id="carPrice" placeholder="Preț Curent (€) (ex: 7100)" required>
+            </div>
+            <div class="form-row">
+                <input type="text" id="carLocation" placeholder="Oraș (ex: Cluj-Napoca)" required>
+                <input type="text" id="carDays" placeholder="Zile Rămase (ex: 3 days)" required>
+            </div>
+            <div class="form-row">
+                <input type="url" id="carImage" placeholder="URL Imagine (ex: https://...)" required>
+                <input type="text" id="carBadges" placeholder="Tag-uri (ex: NO RESERVE, BOOSTED)">
+            </div>
+            <button type="submit" class="btn-publish">Publică Anunțul</button>
+        </form>
+    </section>
+
+    <!-- 3. TITLU SECȚIUNE -->
+    <section class="section-title">
+        <div>
+            <span class="sub-heading">LISTINGS NEARBY</span>
+            <h1>NEAR YOU</h1>
+        </div>
+        <div class="slider-arrows">
+            <button class="arrow-btn">&lt;</button>
+            <button class="arrow-btn">&gt;</button>
+        </div>
+    </section>
+
+    <!-- 4. GRID-UL DE CARDURI -->
+    <main class="card-grid" id="carContainer">
+        
+        <!-- CARD 1: Ducati -->
+        <article class="card">
+            <div class="card-image">
+                <div class="badges">
+                    <span class="badge green">NO RESERVE</span>
+                    <span class="badge gold">BOOSTED</span>
+                </div>
+                <button class="fav-btn" onclick="toggleFav(this)">♡</button>
+                <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600" alt="Ducati">
+            </div>
+            <div class="card-body">
+                <h3>2015 DUCATI 1199 PANIGALE R</h3>
+                <div class="card-info">
+                    <div>
+                        <span class="label">CURRENT BID</span>
+                        <strong class="price" id="price1">€7,100</strong>
+                    </div>
+                    <div class="time-tag">⏱ 3 days</div>
+                </div>
+                <div class="card-footer">
+                    <span class="location">🇷🇴 CLUJ-NAPOCA</span>
+                    <span class="bids">5 BIDS</span>
+                </div>
+                <button class="btn-bid" onclick="placeBid('price1', 100)">Licitează +100 €</button>
+            </div>
+        </article>
+
+        <!-- CARD 2: Porsche Carrera -->
+        <article class="card">
+            <div class="card-image">
+                <button class="fav-btn" onclick="toggleFav(this)">♡</button>
+                <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=600" alt="Porsche">
+            </div>
+            <div class="card-body">
+                <h3>2001 PORSCHE 911 (996) CARRERA 4S</h3>
+                <div class="card-info">
+                    <div>
+                        <span class="label">CURRENT BID</span>
+                        <strong class="price" id="price2">€100</strong>
+                    </div>
+                    <div class="time-tag">⏱ 6 days</div>
+                </div>
+                <div class="card-footer">
+                    <span class="location">🇸🇰 KOSICE</span>
+                    <span class="bids">1 BIDS</span>
+                </div>
+                <button class="btn-bid" onclick="placeBid('price2', 500)">Licitează +500 €</button>
+            </div>
+        </article>
+
+        <!-- CARD 3: Porsche Turbo -->
+        <article class="card">
+            <div class="card-image">
+                <button class="fav-btn" onclick="toggleFav(this)">♡</button>
+                <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600" alt="Porsche Red">
+            </div>
+            <div class="card-body">
+                <h3>2007 PORSCHE 911 (997) TURBO</h3>
+                <div class="card-info">
+                    <div>
+                        <span class="label">CURRENT BID</span>
+                        <strong class="price" id="price3">€35,400</strong>
+                    </div>
+                    <div class="time-tag">⏱ 6 days</div>
+                </div>
+                <div class="card-footer">
+                    <span class="location">🇸🇰 KOSICE</span>
+                    <span class="bids">2 BIDS</span>
+                </div>
+                <button class="btn-bid" onclick="placeBid('price3', 1000)">Licitează +1.000 €</button>
+            </div>
+        </article>
+
+        <!-- CARD 4: Mitsubishi Evo -->
+        <article class="card">
+            <div class="card-image">
+                <button class="fav-btn" onclick="toggleFav(this)">♡</button>
+                <img src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=600" alt="Evo">
+            </div>
+            <div class="card-body">
+                <h3>1999 MITSUBISHI EVO VI TOMMI MÄKINEN</h3>
+                <div class="card-info">
+                    <div>
+                        <span class="label">CURRENT BID</span>
+                        <strong class="price" id="price4">€25,755</strong>
+                    </div>
+                    <div class="time-tag">⏱ 4 days</div>
+                </div>
+                <div class="card-footer">
+                    <span class="location">🇷🇴 TIMIȘOARA</span>
+                    <span class="bids">13 BIDS</span>
+                </div>
+                <button class="btn-bid" onclick="placeBid('price4', 250)">Licitează +250 €</button>
+            </div>
+        </article>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
